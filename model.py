@@ -10,6 +10,86 @@ import pytesseract
 from PIL import Image
 from pptx import Presentation
 from pptx.util import Pt
+import cv2
+import numpy as np
+
+
+def binarize_image(image):
+    _, binary = cv2.threshold(image, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+    return binary
+
+
+def apply_morphology(image):
+    kernel = np.ones((2, 2), np.uint8)
+    morph = cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel)
+    return morph
+
+
+def remove_shadows(image):
+    if len(image.shape) > 2 and image.shape[2] == 3:
+
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    else:
+
+        gray = image
+
+    dilated_img = cv2.dilate(gray, np.ones((7, 7), np.uint8))
+    blurred_img = cv2.medianBlur(dilated_img, 21)
+    divided = np.divide(gray, blurred_img)
+    normalized_img = np.clip(divided * 255, 0, 255).astype(np.uint8)
+    return normalized_img
+
+
+def resize_image(image, height=900):
+    aspect_ratio = image.shape[1] / image.shape[0]
+    width = int(aspect_ratio * height)
+    resized_img = cv2.resize(image, (width, height))
+    return resized_img
+
+
+def apply_adaptive_threshold(image):
+    adaptive_thresh = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+    return adaptive_thresh
+
+
+def preprocess_image(image_path):
+    img = cv2.imread(image_path)
+
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    denoised = cv2.fastNlMeansDenoising(gray, h=10, templateWindowSize=7, searchWindowSize=21)
+
+    alpha = 1.5
+    beta = 0
+    adjusted = cv2.convertScaleAbs(denoised, alpha=alpha, beta=beta)
+
+    binary_image = binarize_image(adjusted)
+
+    morph_image = apply_morphology(binary_image)
+
+    no_shadow_image = remove_shadows(morph_image)
+
+    resized_image = resize_image(no_shadow_image)
+
+    adaptive_thresh_image = apply_adaptive_threshold(resized_image)
+
+    kernel = np.array([[-1, -1, -1],
+                       [-1, 9, -1],
+                       [-1, -1, -1]])
+    sharpened = cv2.filter2D(adaptive_thresh_image, -1, kernel)
+
+    coords = np.column_stack(np.where(sharpened > 0))
+    angle = cv2.minAreaRect(coords)[-1]
+    if angle < -45:
+        angle = -(90 + angle)
+    else:
+        angle = -angle
+    (h, w) = sharpened.shape[:2]
+    center = (w // 2, h // 2)
+    M = cv2.getRotationMatrix2D(center, angle, 1.0)
+    deskewed = cv2.warpAffine(sharpened, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+
+    return deskewed
 
 
 def getImgsFromPDF(pdf_path, output_folder):
@@ -47,9 +127,6 @@ def getImgsFromPDF(pdf_path, output_folder):
 
 
 def getTextFromImgs(images_folder, text_folder):
-    """
-    Extracts text from all the images in images_folder and saves the resulting text files in text_folder.
-    """
     # Ensure output directory exists
     os.makedirs(text_folder, exist_ok=True)
 
@@ -57,7 +134,9 @@ def getTextFromImgs(images_folder, text_folder):
         if image_name.endswith((".png", ".jpg", ".jpeg", ".tiff", ".bmp", ".gif")):
             image_path = os.path.join(images_folder, image_name)
 
-            image = Image.open(image_path)
+            processed_image = preprocess_image(image_path)
+
+            image = Image.fromarray(processed_image)
 
             text = pytesseract.image_to_string(image, lang='eng')
 
@@ -71,9 +150,6 @@ def getTextFromImgs(images_folder, text_folder):
 
 
 def getPPTFromImgText(images_folder, ppt_path):
-    """
-    Creates a PowerPoint presentation with the text extracted from images in images_folder and saves it to ppt_path.
-    """
     prs = Presentation()
     for image_name in sorted(os.listdir(images_folder)):
         if image_name.endswith((".png", ".jpg", ".jpeg", ".tiff", ".bmp", ".gif")):
@@ -82,12 +158,12 @@ def getPPTFromImgText(images_folder, ppt_path):
             image = Image.open(image_path)
             text = pytesseract.image_to_string(image, lang='eng')
 
-            slide_layout = prs.slide_layouts[5]  # choosing a blank slide layout
+            slide_layout = prs.slide_layouts[5]
             slide = prs.slides.add_slide(slide_layout)
 
             txBox = slide.shapes.add_textbox(Pt(50), Pt(50), prs.slide_width - Pt(100), prs.slide_height - Pt(100))
             tf = txBox.text_frame
-            tf.text = text  # Add the extracted text to the text frame
+            tf.text = text
 
     prs.save(ppt_path)
     print(f"PowerPoint saved at {ppt_path}")
@@ -128,10 +204,10 @@ def send_email_with_ppt(recipient_email, pptx_file_path):
 
 
 def send_feedback_email(recipient_email, feedback_text):
-    HOST = "smtp-mail.outlook.com"  # or your SMTP server
+    HOST = "smtp-mail.outlook.com"
     PORT = 587
-    FROM_EMAIL = "codesteinsprojectmail@gmail.com"  # your email
-    PASSWORD = "codes#2oo345"  # your email password
+    FROM_EMAIL = "codesteinsprojectmail@gmail.com"
+    PASSWORD = "codes#2oo345"
 
     msg = MIMEMultipart('alternative')
     msg['From'] = FROM_EMAIL
