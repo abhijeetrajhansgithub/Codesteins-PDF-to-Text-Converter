@@ -1,26 +1,26 @@
 body {
     font-family: Verdana, sans-serif;
     text-align: center;
-    background-color: #121212; /* Dark background color */
+    background-color: #121212;
     color: #fff;
     animation: colorChange 10s infinite alternate;
 }
 
 @keyframes colorChange {
     0% {
-        background-color: #2e0104; /* Darkest shade of red */
+        background-color: #2e0104;
     }
     25% {
-        background-color: #2a012b; /* Purple */
+        background-color: #2a012b;
     }
     50% {
-        background-color: #07012b; /* Blue */
+        background-color: #07012b;
     }
     75% {
-        background-color: #000; /* Black */
+        background-color: #000;
     }
     100% {
-        background-color: #000; /* Black */
+        background-color: #000;
     }
 }
 
@@ -61,8 +61,7 @@ h2 {
 }
 
 .label-input:hover {
-    background-color: rgba(240, 240, 240, 0.3); /* Change background color on hover */
-    /* Add any other hover styles you want */
+    background-color: rgba(240, 240, 240, 0.3);
 }
 
 hr {
@@ -107,8 +106,8 @@ hr {
     border-radius: 10px;
     background-color: rgba(240, 240, 240, 0.1);
     color: white;
-    border: 1px solid #ccc; /* Add a border for better visibility */
-    padding: 5px 15px; /* Add padding to improve appearance */
+    border: 1px solid #ccc;
+    padding: 5px 15px;
     margin-right: 10px;
     width: 300px;
 }
@@ -117,20 +116,20 @@ hr {
     border-radius: 10px;
     background-color: rgba(240, 240, 240, 0.1);
     color: white;
-    border: 1px solid #ccc; /* Add a border for better visibility */
-    padding: 5px 15px; /* Add padding to improve appearance */
+    border: 1px solid #ccc;
+    padding: 5px 15px;
 }
 
 .upload-file-button {
     border-radius: 10px;
     background-color: rgba(240, 240, 240, 0.1);
     color: white;
-    border: 1px solid #ccc; /* Add a border for better visibility */
-    padding: 5px 15px; /* Add padding to improve appearance */
+    border: 1px solid #ccc;
+    padding: 5px 15px;
 }
 
 .made-by {
-    margin: 20px auto; /* Set left and right margins to 'auto' */
+    margin: 20px auto;
     padding: 10px;
     width: 70%;
     background-color: rgba(240, 240, 240, 0.1);
@@ -144,8 +143,8 @@ hr {
     border-radius: 10px;
     background-color: rgba(240, 240, 240, 0.1);
     color: white;
-    border: 1px solid #ccc; /* Add a border for better visibility */
-    padding: 5px 15px; /* Add padding to improve appearance */
+    border: 1px solid #ccc;
+    padding: 5px 15px;
 }
 
 .spam-info {
@@ -157,8 +156,8 @@ hr {
     border-radius: 10px;
     background-color: rgba(240, 240, 240, 0.1);
     color: white;
-    border: 1px solid #ccc; /* Add a border for better visibility */
-    padding: 5px 15px; /* Add padding to improve appearance */
+    border: 1px solid #ccc;
+    padding: 5px 15px;
     margin-right: 10px;
     width: 300px;
 }
@@ -167,17 +166,16 @@ hr {
     border-radius: 10px;
     background-color: rgba(240, 240, 240, 0.1);
     color: white;
-    border: 1px solid #ccc; /* Add a border for better visibility */
-    padding: 5px 15px; /* Add padding to improve appearance */
+    border: 1px solid #ccc;
+    padding: 5px 15px;
 }
 
 .link {
-    color: white; /* Set the link color to white */
-    text-decoration: none; /* Remove underlines (if any) */
-    cursor: pointer; /* Use a pointer cursor on hover */
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-/* Define link styles on hover for the "link" class */
 .link:hover {
-    text-decoration: underline; /* Add underline on hover (optional) */
+    text-decoration: underline;
 }
