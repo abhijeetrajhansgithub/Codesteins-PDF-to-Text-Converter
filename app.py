@@ -64,7 +64,8 @@ def send_email():
 
         return redirect('/')
     except Exception as e:
-        return f"Email could not be sent. Error: {str(e)}", redirect('/')
+        print(e)
+        return redirect('/')
 
 
 @app.route('/upload', methods=['POST'])
