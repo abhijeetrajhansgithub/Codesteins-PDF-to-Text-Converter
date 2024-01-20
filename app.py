@@ -12,7 +12,6 @@ OUTPUT_FOLDER = 'output'
 TEXT_FOLDER = 'text'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Ensure that the directories exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 os.makedirs(TEXT_FOLDER, exist_ok=True)
@@ -42,9 +41,8 @@ def send_email():
             return 'No selected file'
 
         pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        file.save(pdf_path)  # This should work now as the directory exists
+        file.save(pdf_path)
 
-        # Clear the OUTPUT_FOLDER and TEXT_FOLDER before processing new PDF
         for folder in [OUTPUT_FOLDER, TEXT_FOLDER]:
             for filename in os.listdir(folder):
                 file_path = os.path.join(folder, filename)
@@ -79,7 +77,7 @@ def upload_file():
                 return 'No selected file'
             if file:
                 pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-                file.save(pdf_path)  # This should work now as the directory exists
+                file.save(pdf_path)
 
                 for folder in [OUTPUT_FOLDER, TEXT_FOLDER]:
                     for filename in os.listdir(folder):
@@ -90,21 +88,21 @@ def upload_file():
 
                 getTextFromImgs(OUTPUT_FOLDER, TEXT_FOLDER)
 
-                ppt_path = os.path.join(TEXT_FOLDER, 'extracted_text_presentation.pptx')
+                ppt_path = os.path.join(TEXT_FOLDER, 'TextPPT.pptx')
                 getPPTFromImgText(OUTPUT_FOLDER, ppt_path)
 
-                return send_from_directory(TEXT_FOLDER, 'extracted_text_presentation.pptx', as_attachment=True)
+                return send_from_directory(TEXT_FOLDER, 'TextPPT.pptx', as_attachment=True)
             else:
                 return 'Text extraction failed or no text found.'
     except Exception as e:
-        traceback.print_exc()  # This prints the stack trace to the console
+        traceback.print_exc()
         return str(e), 400
 
 
 @app.route('/send_feedback', methods=['POST'])
 def send_feedback():
     try:
-        feedback_text = request.form['feedback_text']  # Get feedback text from the form
+        feedback_text = request.form['feedback_text']
 
         send_feedback_email("codesteinsprojectmail@gmail.com", feedback_text)
 
