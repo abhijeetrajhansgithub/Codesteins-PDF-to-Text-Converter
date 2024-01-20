@@ -8,24 +8,24 @@ document.addEventListener('DOMContentLoaded', (event) => {
   };
 
   pdfDropBox.addEventListener('click', () => {
-    fileInput.click(); // Open file dialog when the drop box is clicked
+    fileInput.click();
   });
 
   pdfDropBox.addEventListener('dragover', (e) => {
-    e.preventDefault(); // Prevent default behavior when a file is dragged over the drop box
+    e.preventDefault();
   });
 
   pdfDropBox.addEventListener('drop', (e) => {
-    e.preventDefault(); // Prevent default behavior when a file is dropped
+    e.preventDefault();
     if (e.dataTransfer.files.length) {
-      fileInput.files = e.dataTransfer.files; // Update file input with the dropped files
-      updateFileNameDisplay(e.dataTransfer.files[0]); // Update the file name display
+      fileInput.files = e.dataTransfer.files;
+      updateFileNameDisplay(e.dataTransfer.files[0]);
     }
   });
 
   fileInput.addEventListener('change', () => {
     if (fileInput.files.length) {
-      updateFileNameDisplay(fileInput.files[0]); // Update the file name display when a file is selected through the file dialog
-    }
+      updateFileNameDisplay(fileInput.files[0]);
+      }
   });
 });
