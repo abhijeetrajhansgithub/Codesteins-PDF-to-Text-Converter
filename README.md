@@ -33,10 +33,7 @@ Describe the steps to install and set up the project locally. Include:
     Pillow (PIL)
     python-pptx
     ```
-4. **Set up environment variables**
-    - Explain how to set up any required environment variables (e.g., for email functionality).
-
-5. **Running the application**
+4. **Running the application**
     ```bash
     python app.py
     ```
@@ -60,6 +57,3 @@ Acknowledge those who contributed to the project.
 
 ## Support
 Contact : codesteinsprojectmail@gmail.com
-
-## Feedback
-Encourage users to provide feedback and provide a link or method for collecting it.
