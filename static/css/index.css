@@ -37,7 +37,7 @@ h2 {
     padding: 20px;
     cursor: pointer;
     align-items: center;
-    margin-left: 170px;
+    margin-left: 45px;
     border-radius: 20px;
 }
 
@@ -178,4 +178,19 @@ hr {
 
 .link:hover {
     text-decoration: underline;
+}
+
+
+@media only screen and (max-width: 680px) {
+    .div1, .div2, .div3, .div4 {
+        width: 350px;
+    }
+
+    #pdfDropBox {
+    display: none;
+    }
+
+    hr {
+        width: 100%;
+    }
 }
