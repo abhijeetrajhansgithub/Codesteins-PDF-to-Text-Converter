@@ -42,7 +42,7 @@ h2 {
 }
 
 .pdfDropBox-Box {
-    font-size: 10px;
+    font-size: 20px;
 }
 
 .div1 {
@@ -192,5 +192,13 @@ hr {
 
     hr {
         width: 100%;
+    }
+
+    body{
+        font-size : 18px;
+    }
+
+    .spam-info,.label-input-2{
+        font-size : 18px;
     }
 }
