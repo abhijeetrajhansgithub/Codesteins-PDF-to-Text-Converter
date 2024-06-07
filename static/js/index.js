@@ -28,4 +28,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
       updateFileNameDisplay(fileInput.files[0]);
       }
   });
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> d97f248101bc928ed6b13f44eb3aa363ca7658b7
